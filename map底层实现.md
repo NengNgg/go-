@@ -1,6 +1,5 @@
 # Map底层原理剖析
-Golang中的Map的核心数据结构由 **`hmap`和`bmap`** 来实现的,如下图所示：
-![f974c1d008348bd65a1463f7d6a4490a.png](en-resource://database/805:1)
+Golang中的Map的核心数据结构由 **`hmap`和`bmap`** 来实现的,如下图所示：![image](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map1.PNG)
 
 
 >图中结构体结构体是动态变化的，当发生扩容时，当产生溢出桶时等等，结构是会发生变化的。
@@ -79,7 +78,7 @@ value := info["name"]
     * B>15,已使用的溢出桶个数>=$2^{15}$，引发等量扩容
 
 >扩容的机制:如下图
-![223db6a4dc3b2c2156382f29db27da02.png](en-resource://database/799:1)
+![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map2.PNG)
 
 **注意:** 扩容后,新创建的桶里还没有数据,数据还在旧桶里,下面进行的迁移才会进行数据转移
 
@@ -92,17 +91,17 @@ value := info["name"]
 * **翻倍扩容的迁移方式：** 就是将旧桶中的数据cell（键值对）分流至新的两个桶中(比例不一定),并且编号的位置为:同编号位置 和 翻倍后对应编号位置。
     *  **首先：** 因为是翻倍扩容，则新桶的个数是旧桶的2倍，也就是说B+1（桶的个数=$2^{B}$,桶个数变成2倍，B等同+1）
     *  **然后：** 迁移时会遍历某个旧桶中所有的key（包括溢出桶），并根据key重新生成哈希值，根据哈希值的**后B位**来确定将此键值对分流到那个新桶中。
-       ![589627604931f5279dd87175f65f0b3b.png](en-resource://database/801:1)
+       ![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map3.PNG)
 
-  `扩容前的图形：`![1837ecb2ee5dbe4b2f36a8d191cb41b5.png](en-resource://database/813:1)
-  `翻倍扩容后：`![db5ae4daf66a1bec4a868efa4cb942cf.png](en-resource://database/807:1)
+  `扩容前的图形：`![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map4.PNG)
+  `翻倍扩容后：`![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map5.PNG)
 
 >因为key会发生搬迁，原来落在同一个bucket中的key，搬迁后就可以不再同一个bucket中了（bucket序列加上2^B）,而且重新开始遍历时，它是随机的键值对开始连同桶里cell都是随机选择遍历的，所以这就解释了**map为什么是无序的了。**
 * **等额搬迁：** 就很简单了，由于扩容桶的数量不变，
   因此可以按序号来搬，比如原来在 0 号 bucktes，到新的地方后，仍然放在 0 号 buckets就OK了
 
 
-` 等容扩容：`![0bc982320a4a8d0efffd247c121003f0.png](en-resource://database/811:1)
+` 等容扩容：`![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map6.PNG)
 
 * * *
 
