@@ -93,13 +93,18 @@ value := info["name"]
     *  **然后：** 迁移时会遍历某个旧桶中所有的key（包括溢出桶），并根据key重新生成哈希值，根据哈希值的**后B位**来确定将此键值对分流到那个新桶中。
        ![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map3.PNG)
 
-  `扩容前的图形：`![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map4.PNG)
-  `翻倍扩容后：`![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map5.PNG)
+  `扩容前的图形：`   
+  ![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map4.PNG)   
+  
+  `翻倍扩容后：`   
+  ![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map5.PNG)
 
 >因为key会发生搬迁，原来落在同一个bucket中的key，搬迁后就可以不再同一个bucket中了（bucket序列加上2^B）,而且重新开始遍历时，它是随机的键值对开始连同桶里cell都是随机选择遍历的，所以这就解释了**map为什么是无序的了。**
 * **等额搬迁：** 就很简单了，由于扩容桶的数量不变，
-  因此可以按序号来搬，比如原来在 0 号 bucktes，到新的地方后，仍然放在 0 号 buckets就OK了
-` 等容扩容：`![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map6.PNG)
+  因此可以按序号来搬，比如原来在 0 号 bucktes，到新的地方后，仍然放在 0 号 buckets就OK了   
+  
+` 等容扩容：`  
+![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map6.PNG)
 
 * * *
 
