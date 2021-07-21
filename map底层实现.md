@@ -99,8 +99,6 @@ value := info["name"]
 >因为key会发生搬迁，原来落在同一个bucket中的key，搬迁后就可以不再同一个bucket中了（bucket序列加上2^B）,而且重新开始遍历时，它是随机的键值对开始连同桶里cell都是随机选择遍历的，所以这就解释了**map为什么是无序的了。**
 * **等额搬迁：** 就很简单了，由于扩容桶的数量不变，
   因此可以按序号来搬，比如原来在 0 号 bucktes，到新的地方后，仍然放在 0 号 buckets就OK了
-
-
 ` 等容扩容：`![avatar](https://raw.githubusercontent.com/NengNgg/go-/master/map_picture/map6.PNG)
 
 * * *
